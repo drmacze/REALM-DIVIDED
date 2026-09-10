@@ -3,57 +3,37 @@
   if (!video) return;
 
   const source = video.querySelector('source');
-  if (!source) return;
+  const trailerPath = 'assets/gemini_generated_video_228E3EF6.mp4';
 
-  const candidates = [
-    'assets/realm-divided-cinematic.mp4',
-    'realm-divided-cinematic.mp4'
-  ];
-  let candidateIndex = 0;
+  const markUnavailable = () => {
+    video.classList.add('video-unavailable');
+    document.body.classList.remove('video-ready');
+  };
 
-  const markUnavailable = () => video.classList.add('video-unavailable');
   const markReady = () => {
     video.classList.remove('video-unavailable');
     document.body.classList.add('video-ready');
   };
 
-  markUnavailable();
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
 
-  async function tryNextSource() {
-    if (candidateIndex >= candidates.length) {
-      markUnavailable();
-      return;
-    }
+  if (source) source.src = trailerPath;
+  else video.src = trailerPath;
 
-    const url = candidates[candidateIndex++];
-    try {
-      const response = await fetch(url, { method: 'HEAD', cache: 'no-store' });
-      const length = Number(response.headers.get('content-length') || 0);
-      if (!response.ok || (length > 0 && length < 1024)) {
-        return tryNextSource();
-      }
-    } catch (_) {
-      return tryNextSource();
-    }
+  video.addEventListener('loadeddata', markReady, { once: true });
+  video.addEventListener('canplay', markReady, { once: true });
+  video.addEventListener('error', markUnavailable);
+  if (source) source.addEventListener('error', markUnavailable);
 
-    source.src = `${url}?v=${Date.now()}`;
-    video.load();
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {});
-    }
-  }
-
-  video.addEventListener('loadeddata', markReady);
-  video.addEventListener('canplay', markReady);
-  source.addEventListener('error', () => {
-    markUnavailable();
-    tryNextSource();
+  video.load();
+  const tryPlay = () => {
+    const p = video.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  };
+  tryPlay();
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) tryPlay();
   });
-  video.addEventListener('error', () => {
-    markUnavailable();
-    tryNextSource();
-  });
-
-  tryNextSource();
 })();
