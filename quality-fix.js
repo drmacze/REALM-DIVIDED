@@ -3,7 +3,7 @@
   if (!video) return;
 
   const source = video.querySelector('source');
-  const trailerPath = 'assets/gemini_generated_video_228E3EF6.mp4';
+  const trailerPath = 'assets/gemini_generated_video_4CF82E48.mp4?v=4CF82E48';
 
   const markUnavailable = () => {
     video.classList.add('video-unavailable');
