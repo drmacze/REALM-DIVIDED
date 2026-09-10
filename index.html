@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="quality-fix.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -31,7 +32,7 @@
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="https://res.cloudinary.com/vitjnhhb/image/upload/v1789066927/realm-divided/realm-divided-banner.jpg" aria-hidden="true">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
         <source src="assets/realm-divided-cinematic.mp4" type="video/mp4">
       </video>
       <div class="hero-fallback" aria-hidden="true"></div>
@@ -121,12 +122,13 @@
       <div class="footer-links"><a href="#realm">The Realm</a><a href="#factions">Factions</a><a href="#development">Development</a><a href="#faq">FAQ</a><a href="preorder.html">Pre-Order</a></div>
     </div>
     <div class="platform-strip" aria-label="Brand references">
-      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer"><img class="xbox-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Xbox%20Logo.svg" alt="Xbox"></a>
+      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer" aria-label="Xbox"><img class="xbox-logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Xbox_Logo.svg" alt="Xbox"></a>
       <a href="https://www.minecraft.net/" target="_blank" rel="noreferrer"><img class="minecraft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Minecraft%20Logo-en.svg" alt="Minecraft"></a>
       <a href="https://www.microsoft.com/" target="_blank" rel="noreferrer"><img class="microsoft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Microsoft.svg" alt="Microsoft"></a>
     </div>
     <div class="legal"><p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p><p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p><span>© <span id="year"></span> Realm Divided. Project in development.</span></div>
   </footer>
   <script src="script.js"></script>
+  <script src="quality-fix.js"></script>
 </body>
 </html>
