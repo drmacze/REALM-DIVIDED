@@ -22,4 +22,4 @@ if(video){const play=()=>{if(!video.classList.contains('video-unavailable'))vide
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
 
 // Resume soundtrack after the explicit Return to the Realm gesture from pre-order.
-(()=>{const s=document.createElement('script');s.src='music-resume.js?v=rd15';s.defer=true;document.head.appendChild(s)})();
+(()=>{const s=document.createElement('script');s.src='music-resume.js?v=rd17';s.defer=true;document.head.appendChild(s)})();
