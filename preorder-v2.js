@@ -1,8 +1,13 @@
 (() => {
+  const LOGO = 'https://res.cloudinary.com/vitjnhhb/image/upload/v1789066659/realm-divided/realm-divided-logo.jpg';
+  const AUDIO = 'assets/blendertimer-medieval-kingdoms-598387.mp3';
+  document.querySelectorAll('[data-logo]').forEach(img => { img.src = LOGO; });
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
+
   const button = document.querySelector('[data-preorder-action]');
   const toast = document.querySelector('.preorder-toast');
   const returnLinks = document.querySelectorAll('[data-return-realm]');
-  const AUDIO = 'assets/blendertimer-medieval-kingdoms-598387.mp3';
   let toastTimer = 0;
 
   const showToast = (text) => {
