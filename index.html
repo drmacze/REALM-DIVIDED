@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=rd6">
-  <link rel="stylesheet" href="quality-fix.css?v=rd6">
-  <link rel="stylesheet" href="motion.css?v=rd6">
-  <link rel="stylesheet" href="cinematic-v2.css?v=rd6">
+  <link rel="stylesheet" href="styles.css?v=rd15">
+  <link rel="stylesheet" href="quality-fix.css?v=rd15">
+  <link rel="stylesheet" href="motion.css?v=rd15">
+  <link rel="stylesheet" href="cinematic-v2.css?v=rd15">
   <style id="story-critical">
     .scroll-story{height:270svh;position:relative;background:#050302;color:#f3eadb;z-index:3}
     .story-sticky{height:100svh;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,#211208 0%,#0b0604 38%,#050302 74%)}
@@ -28,8 +28,9 @@
     .story-factions span{width:45px;height:58px;display:grid;place-items:center;border:1px solid rgba(221,180,111,.5);font:700 .8rem Georgia,serif;color:#e6d2b3}
     .story-scroll-label{display:none}
   </style>
-  <link rel="stylesheet" href="premium.css?v=rd6">
-  <link rel="stylesheet" href="onboarding.css?v=rd12">
+  <link rel="stylesheet" href="premium.css?v=rd15">
+  <link rel="stylesheet" href="home-clean.css?v=rd15">
+  <link rel="stylesheet" href="onboarding.css?v=rd15">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -38,7 +39,6 @@
       <img data-logo alt="Realm Divided crest">
       <span>Realm Divided</span>
     </a>
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Primary navigation">
       <a href="#realm">The Realm</a>
       <a href="#factions">Factions</a>
@@ -56,16 +56,9 @@
       <div class="hero-fallback" aria-hidden="true"></div>
       <div class="hero-vignette" aria-hidden="true"></div>
       <div class="hero-content">
-        <div class="eyebrow"><span class="status-dot"></span> Project in development</div>
         <img class="hero-crest" data-logo alt="Realm Divided crest">
         <p class="hero-kicker">Five factions · One broken empire</p>
         <h1 id="hero-title"><span>Realm</span><strong>Divided</strong></h1>
-        <p class="hero-copy">The emperor is dead. No heir remains. Five powers now fight to decide what rises from the ruins.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#realm">Enter the Realm</a>
-          <a class="btn btn-ghost" href="preorder.html">Pre-Order</a>
-        </div>
-        <p class="hero-note">COMING SOON · RELEASE DATE TO BE ANNOUNCED</p>
       </div>
       <a class="scroll-cue" href="#story"><span></span>Discover</a>
     </section>
@@ -126,7 +119,7 @@
       <div class="section-heading reveal"><p class="kicker">Behind the gates</p><h2>Currently in development.</h2><p>Realm Divided is still being built. This site intentionally reveals only the parts of the project that are ready to be shown.</p></div>
       <div class="dev-panel reveal">
         <div class="dev-state"><i></i><div><small>Current state</small><strong>Pre-release development</strong></div></div>
-        <div class="dev-list"><div><b>World & Kingdom Design</b><span>In development</span></div><div><b>Faction Lore</b><span>In development</span></div><div><b>Gameplay Systems</b><span>In development</span></div><div><b>Public Release</b><span>To be announced</span></div></div>
+        <div class="dev-list"><div><b>World & Kingdom Design</b><span>In development</span></div><div><b>Faction Lore</b><span>In development</span></div><div><b>Gameplay Systems</b><span>In development</span></div><div><b>Public Release</b><span>September 2026</span></div></div>
       </div>
     </section>
 
@@ -135,7 +128,7 @@
       <div class="faq-list reveal">
         <details><summary>What is Realm Divided?<span>+</span></summary><p>A medieval Minecraft project set on a large continent split into five rival factions after its emperor dies without an heir.</p></details>
         <details><summary>Can players choose a faction?<span>+</span></summary><p>Yes. The core concept is built around allowing players to align themselves with any of the five factions.</p></details>
-        <details><summary>Can I pre-order now?<span>+</span></summary><p>The pre-order page is now available as a project gate, but checkout and payment are not open yet. Pricing and edition details will be announced later.</p></details>
+        <details><summary>Can I pre-order now?<span>+</span></summary><p>Yes. The Standard pre-order is $0 / Free, with release planned for September 2026.</p></details>
         <details><summary>Which Minecraft edition will be supported?<span>+</span></summary><p>Final platform and version support will be announced closer to release.</p></details>
         <details><summary>When will the factions be fully revealed?<span>+</span></summary><p>Faction names, leaders, territories, and detailed lore will be revealed gradually during development.</p></details>
       </div>
@@ -146,7 +139,7 @@
         <img data-logo alt="Realm Divided crest">
         <p class="kicker">The gates will open</p>
         <h2>Claim your place in the realm.</h2>
-        <p>Pre-order information, pricing, editions, and launch details will be revealed when they are ready.</p>
+        <p>Standard pre-order is free. Reserve your place in the realm ahead of the September 2026 release.</p>
         <a class="btn btn-primary" href="preorder.html">Pre-Order</a>
       </div>
     </section>
@@ -165,12 +158,12 @@
     <div class="legal"><p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p><p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p><span>© <span id="year"></span> Realm Divided. Project in development.</span></div>
   </footer>
 
-  <script src="script.js?v=rd6"></script>
-  <script src="quality-fix.js?v=rd6"></script>
+  <script src="script.js?v=rd15"></script>
+  <script src="quality-fix.js?v=rd15"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <script src="motion.js?v=rd6"></script>
-  <script src="onboarding.js?v=rd12"></script>
+  <script src="motion.js?v=rd15"></script>
+  <script src="onboarding.js?v=rd15"></script>
 </body>
 </html>
