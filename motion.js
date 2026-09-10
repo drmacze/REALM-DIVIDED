@@ -38,15 +38,13 @@
   document.body.appendChild(orb);
 
   const header = document.querySelector('.site-header');
-  let lastDirection = 1;
-  lenis.on('scroll', ({ progress: p, velocity, direction }) => {
+  lenis.on('scroll', ({ progress: p, velocity }) => {
     gsap.set(progress, { scaleY: Math.max(0, Math.min(1, p || 0)) });
     if (header) header.classList.toggle('is-scrolled', (p || 0) > 0.008);
     if (!reduced && orb) {
       const v = Math.min(Math.abs(velocity || 0), 24);
       gsap.to(orb, { opacity: v > 0.8 ? 0.8 : 0, scale: 0.6 + v / 18, duration: 0.3, overwrite: true });
     }
-    if (direction) lastDirection = direction;
   });
 
   if (reduced) {
@@ -58,7 +56,6 @@
     return;
   }
 
-  // Opening sequence: cinematic but short enough that the site never feels blocked.
   const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
   intro
     .from('.hero .eyebrow', { y: 22, opacity: 0, duration: 0.75 })
@@ -70,7 +67,6 @@
     .from('.hero-actions .btn', { y: 18, opacity: 0, stagger: 0.09, duration: 0.58 }, '-=.5')
     .from('.hero-note,.scroll-cue', { opacity: 0, y: 10, duration: 0.55 }, '-=.3');
 
-  // Hero depth follows the scroll, similar to editorial/showcase motion sites.
   const heroTL = gsap.timeline({
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.8 }
   });
@@ -81,7 +77,7 @@
     .to('.scroll-cue', { y: 22, opacity: 0, ease: 'none' }, 0);
 
   document.querySelectorAll('.section-heading').forEach((heading) => {
-    const parts = heading.querySelectorAll('.kicker,h2,> p');
+    const parts = heading.querySelectorAll(':scope > .kicker, :scope > h2, :scope > p');
     gsap.fromTo(parts,
       { y: 44, opacity: 0 },
       {
@@ -175,7 +171,6 @@
     }
   );
 
-  // Give larger screens slightly richer depth without overloading mobile Safari.
   gsap.matchMedia().add('(min-width: 900px)', () => {
     gsap.to('.realm-section .ornament', {
       y: -26, opacity: 0.25, ease: 'none',
