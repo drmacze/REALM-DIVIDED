@@ -2,7 +2,8 @@ const ASSETS={logo:'https://res.cloudinary.com/vitjnhhb/image/upload/v1789066659
 document.querySelectorAll('[data-logo]').forEach(img=>{img.src=ASSETS.logo});
 
 // Load clean homepage refinements without touching the restored Factions scroll engine.
-(()=>{if(!document.querySelector('link[data-home-clean]')){const l=document.createElement('link');l.rel='stylesheet';l.href='home-clean.css?v=rd13';l.dataset.homeClean='1';document.head.appendChild(l)}})();
+(()=>{if(!document.querySelector('link[data-home-clean]')){const l=document.createElement('link');l.rel='stylesheet';l.href='home-clean.css?v=rd14';l.dataset.homeClean='1';document.head.appendChild(l)}})();
+(()=>{const s=document.createElement('script');s.src='home-clean.js?v=rd14';s.defer=true;document.head.appendChild(s)})();
 
 const menuButton=document.querySelector('.menu-toggle');
 const nav=document.querySelector('.nav');
@@ -32,4 +33,4 @@ const year=document.getElementById('year');if(year)year.textContent=new Date().g
 })();
 
 // Resume soundtrack after the explicit Return to the Realm gesture from pre-order.
-(()=>{const s=document.createElement('script');s.src='music-resume.js?v=rd13';s.defer=true;document.head.appendChild(s)})();
+(()=>{const s=document.createElement('script');s.src='music-resume.js?v=rd14';s.defer=true;document.head.appendChild(s)})();
