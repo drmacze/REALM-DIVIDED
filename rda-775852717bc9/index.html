@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="theme-color" content="#090604">
+  <title>Realm Divided — Developer Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main>
+    <section class="gate" id="gate">
+      <div class="gate-card">
+        <div class="crest">RD</div>
+        <p class="eyebrow">Restricted area</p>
+        <h1>Developer Console</h1>
+        <p>Realm Divided internal project controls.</p>
+        <form id="gateForm" autocomplete="off">
+          <label for="accessCode">Access code</label>
+          <div class="code-row"><input id="accessCode" type="password" autocomplete="current-password" spellcheck="false" required><button type="submit">Enter</button></div>
+          <small id="gateMessage" role="status"></small>
+        </form>
+      </div>
+    </section>
+
+    <section class="console" id="console" hidden>
+      <header class="topbar">
+        <div><p class="eyebrow">Realm Divided</p><h1>Developer Console</h1></div>
+        <div class="top-actions"><a href="../" target="_blank" rel="noreferrer">Open site</a><button id="lockButton">Lock</button></div>
+      </header>
+
+      <section class="status-grid">
+        <article><span>Repository</span><strong id="repoState">Checking…</strong><small>drmacze/REALM-DIVIDED</small></article>
+        <article><span>Latest deploy</span><strong id="deployState">Checking…</strong><small id="deployTime">GitHub Pages</small></article>
+        <article><span>Latest commit</span><strong id="commitShort">Checking…</strong><small id="commitMessage">main</small></article>
+        <article><span>Pre-order</span><strong id="preorderState">Checking…</strong><small>site-config.json</small></article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">Manage</p><h2>Website controls</h2></div><span>Changes are protected by your GitHub login.</span></div>
+        <div class="control-grid">
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/edit/main/index.html" target="_blank" rel="noreferrer"><b>Homepage</b><span>Edit sections, FAQ, footer and navigation.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/edit/main/preorder.html" target="_blank" rel="noreferrer"><b>Pre-Order</b><span>Edit the current pre-order preview page.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/edit/main/site-config.json" target="_blank" rel="noreferrer"><b>Site Config</b><span>Manage project state and trailer path.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/edit/main/styles.css" target="_blank" rel="noreferrer"><b>Core Styling</b><span>Edit the medieval visual system.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/edit/main/quality-fix.css" target="_blank" rel="noreferrer"><b>Quality Overrides</b><span>Mobile, fallback and logo quality fixes.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/upload/main/assets" target="_blank" rel="noreferrer"><b>Media Upload</b><span>Upload trailer, banners, logos and project media.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED/actions" target="_blank" rel="noreferrer"><b>Deployments</b><span>Inspect GitHub Pages build and deploy status.</span></a>
+          <a class="control" href="https://github.com/drmacze/REALM-DIVIDED" target="_blank" rel="noreferrer"><b>Repository</b><span>Open full project source and commit history.</span></a>
+        </div>
+      </section>
+
+      <section class="panel split">
+        <div>
+          <p class="eyebrow">Media slot</p>
+          <h2>Cinematic trailer</h2>
+          <p class="muted">Upload your video manually to the exact path below. The homepage already checks this file and automatically uses the CSS fallback when the video is absent.</p>
+          <div class="path-box"><code>assets/realm-divided-cinematic.mp4</code><button data-copy="assets/realm-divided-cinematic.mp4">Copy</button></div>
+          <a class="primary-link" href="https://github.com/drmacze/REALM-DIVIDED/upload/main/assets" target="_blank" rel="noreferrer">Upload trailer to assets</a>
+        </div>
+        <div>
+          <p class="eyebrow">Private notes</p>
+          <h2>Development notes</h2>
+          <p class="muted">Stored only in this browser, not in the public repository.</p>
+          <textarea id="notes" rows="7" placeholder="Faction names, tasks, release notes…"></textarea>
+          <div class="note-actions"><button id="saveNotes">Save on this device</button><span id="noteStatus"></span></div>
+        </div>
+      </section>
+
+      <footer>Realm Divided internal console · no public navigation entry</footer>
+    </section>
+  </main>
+  <script src="admin.js"></script>
+</body>
+</html>
