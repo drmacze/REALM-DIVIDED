@@ -36,6 +36,7 @@
     audio.volume = 0;
     audio.src = AUDIO_SOURCES[0];
     document.body.appendChild(audio);
+    try { audio.load(); } catch (_) {}
     return audio;
   }
 
@@ -63,11 +64,11 @@
   function fadeAudioIn(player) {
     const target = 0.42;
     const start = performance.now();
-    const duration = 1600;
+    const duration = 1500;
     const step = now => {
       const p = Math.min(1, (now - start) / duration);
       player.volume = target * (1 - Math.pow(1 - p, 3));
-      if (p < 1) requestAnimationFrame(step);
+      if (p < 1 && !player.paused) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }
@@ -78,11 +79,17 @@
       if (showUI) showIsland();
       return true;
     }
+
     for (let i = sourceIndex; i < AUDIO_SOURCES.length; i++) {
       sourceIndex = i;
-      if (!player.src.endsWith(AUDIO_SOURCES[i])) player.src = AUDIO_SOURCES[i];
+      const wanted = new URL(AUDIO_SOURCES[i], location.href).href;
+      if (player.src !== wanted) {
+        player.src = wanted;
+        try { player.load(); } catch (_) {}
+      }
       try {
-        await player.play();
+        const playPromise = player.play();
+        if (playPromise && typeof playPromise.then === 'function') await playPromise;
         audioStarted = true;
         safeSet(STORAGE.music, '1');
         fadeAudioIn(player);
@@ -118,6 +125,20 @@
     document.body.classList.remove('rd-onboarding-active');
     try { window.realmLenis?.start(); } catch (_) {}
     try { window.ScrollTrigger?.refresh(); } catch (_) {}
+  }
+
+  const friendIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.1 11.2a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2Zm7.8-.7a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM1.8 19.7c.4-4 2.5-6.1 6.3-6.1s5.9 2.1 6.3 6.1M14.1 13.4c.6-.3 1.3-.4 2.1-.4 3.4 0 5.3 1.8 5.8 5.3"/></svg>`;
+  const otherIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>`;
+
+  function sourceButton({ source, label, sub, icon, custom = '' }) {
+    const iconMarkup = custom || `<img src="${icon}" alt="" aria-hidden="true" loading="eager" decoding="async">`;
+    return `
+      <button class="rd-entry-btn rd-source-btn" data-source="${source}">
+        <span class="rd-source-logo">${iconMarkup}</span>
+        <span class="rd-source-brand"><b>${label}</b><small>${sub}</small></span>
+      </button>`;
   }
 
   function buildEntry() {
@@ -169,15 +190,24 @@
         <section class="rd-entry-panel" data-stage="source">
           <p class="rd-entry-kicker">One final question</p>
           <h2 class="rd-entry-title">Dari mana kamu mengetahui project ini?</h2>
-          <p class="rd-entry-copy">Pilih satu. Setelah itu gerbang akan terbuka.</p>
+          <p class="rd-entry-copy">Pilih satu. Musik akan dimulai dan setelah itu gerbang akan terbuka.</p>
           <div class="rd-source-grid">
-            <button class="rd-entry-btn rd-source-btn" data-source="TikTok">TikTok<small>Short video</small></button>
-            <button class="rd-entry-btn rd-source-btn" data-source="YouTube">YouTube<small>Video</small></button>
-            <button class="rd-entry-btn rd-source-btn" data-source="Media Social">Media Social<small>Social feed</small></button>
-            <button class="rd-entry-btn rd-source-btn" data-source="Discord">Discord<small>Community</small></button>
-            <button class="rd-entry-btn rd-source-btn" data-source="Teman">Teman<small>Friend</small></button>
-            <button class="rd-entry-btn rd-source-btn" data-source="Other">Other<small>Elsewhere</small></button>
+            ${sourceButton({source:'TikTok',label:'TikTok',sub:'Short video',icon:'https://cdn.simpleicons.org/tiktok/FFFFFF'})}
+            ${sourceButton({source:'YouTube',label:'YouTube',sub:'Video',icon:'https://cdn.simpleicons.org/youtube/FF0000'})}
+            ${sourceButton({source:'Media Social',label:'Media Social',sub:'Social feed',icon:'https://cdn.simpleicons.org/instagram/E4405F'})}
+            ${sourceButton({source:'Discord',label:'Discord',sub:'Community',icon:'https://cdn.simpleicons.org/discord/5865F2'})}
+            ${sourceButton({source:'Teman',label:'Teman',sub:'Friend',custom:friendIcon})}
+            ${sourceButton({source:'Other',label:'Other',sub:'Elsewhere',custom:otherIcon})}
           </div>
+        </section>
+
+        <section class="rd-entry-panel rd-thanks-panel" data-stage="thanks">
+          <div class="rd-thanks-seal" aria-hidden="true"><span>✦</span></div>
+          <p class="rd-entry-kicker">Your answer has been received</p>
+          <h2 class="rd-entry-title">Terima kasih.</h2>
+          <p class="rd-entry-copy">Jawaban kamu membantu kami mengetahui bagaimana Realm Divided ditemukan. Dukungan dan rasa penasaranmu adalah bagian dari perjalanan project ini.</p>
+          <div class="rd-thanks-source"><span>Discovered through</span><strong data-thanks-source>Realm Divided</strong></div>
+          <p class="rd-thanks-opening">The gates are opening.</p>
         </section>
 
         <div class="rd-entry-progress" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -192,8 +222,9 @@
     const dots = [...root.querySelectorAll('.rd-entry-progress i')];
     let current = null;
     let transitionTimer = 0;
+    let finishing = false;
 
-    const stageProgress = { welcome: 0, interest: 1, typing: 1, source: 2 };
+    const stageProgress = { welcome: 0, interest: 1, typing: 1, source: 2, thanks: 2 };
 
     function stage(name, delay = 0) {
       clearTimeout(transitionTimer);
@@ -203,6 +234,7 @@
         panels.forEach(panel => panel.classList.remove('is-active', 'is-leaving'));
         next.classList.add('is-active');
         current = next;
+        if (name === 'source') ensureAudio();
         const idx = stageProgress[name];
         dots.forEach((dot, i) => dot.classList.toggle('is-active', Number.isInteger(idx) && i === idx));
       };
@@ -234,18 +266,37 @@
       window.setTimeout(tick, 380);
     }
 
-    async function finish(source) {
+    async function finish(source, btn) {
+      if (finishing) return;
+      finishing = true;
+      root.querySelectorAll('[data-source]').forEach(button => button.disabled = true);
+      btn?.classList.add('is-selected');
+
       safeSet(STORAGE.source, source);
       safeSet(STORAGE.complete, '1');
       safeSet(STORAGE.music, '1');
       setCookie('rd_discovery_source', source, 365);
-      startAudio(true);
-      root.classList.add('is-exiting');
+
+      const thanksSource = root.querySelector('[data-thanks-source]');
+      if (thanksSource) thanksSource.textContent = source;
+
+      const musicPromise = startAudio(true);
+      stage('thanks');
+      const musicStarted = await musicPromise;
+      if (!musicStarted) {
+        safeSet(STORAGE.music, '0');
+        const opening = root.querySelector('.rd-thanks-opening');
+        if (opening) opening.textContent = 'The gates are opening.';
+      }
+
+      window.setTimeout(() => {
+        root.classList.add('is-exiting');
+      }, 3200);
       window.setTimeout(() => {
         root.classList.remove('is-visible');
         unlockPage();
-      }, 560);
-      window.setTimeout(() => root.remove(), 1200);
+      }, 3820);
+      window.setTimeout(() => root.remove(), 4550);
     }
 
     root.querySelectorAll('[data-consent]').forEach(btn => btn.addEventListener('click', () => {
@@ -265,7 +316,7 @@
       } else stage('source');
     }));
 
-    root.querySelectorAll('[data-source]').forEach(btn => btn.addEventListener('click', () => finish(btn.dataset.source)));
+    root.querySelectorAll('[data-source]').forEach(btn => btn.addEventListener('click', () => finish(btn.dataset.source, btn)));
 
     const consentKnown = !forcePreview && (safeGet(STORAGE.consent) || hasCookie('rd_cookie_consent'));
     if (consentKnown) {
@@ -276,12 +327,14 @@
 
   function startFirstVisit(forcePreview = false) {
     lockPage();
+    ensureAudio();
     const root = buildEntry();
     requestAnimationFrame(() => root.classList.add('is-visible'));
     controller(root, forcePreview);
   }
 
   function boot() {
+    ensureAudio();
     if (FORCE_PREVIEW) {
       startFirstVisit(true);
       return;
