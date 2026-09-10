@@ -1,0 +1,21 @@
+/* Cinematic motion layer: Lenis + GSAP. Visuals only; the page remains usable if JS/CDNs fail. */
+:root{--rd-scroll-progress:0;--rd-scroll-velocity:0}
+html{background:#090604}
+body.motion-enhanced{overscroll-behavior-y:none}
+body.motion-enhanced .reveal{transition:none!important}
+body.motion-enhanced .site-header{will-change:transform,background-color,backdrop-filter;transition:background-color .35s ease,border-color .35s ease,box-shadow .35s ease}
+body.motion-enhanced .site-header.is-scrolled{background:rgba(9,6,4,.82);border-bottom:1px solid rgba(209,155,81,.12);box-shadow:0 12px 40px rgba(0,0,0,.18);backdrop-filter:blur(18px)}
+body.motion-enhanced .hero{perspective:1100px}
+body.motion-enhanced .hero-content,body.motion-enhanced .hero-video,body.motion-enhanced .hero-fallback,body.motion-enhanced .hero-vignette{will-change:transform,opacity}
+body.motion-enhanced .hero h1{perspective:900px;transform-style:preserve-3d}
+body.motion-enhanced .hero h1 span,body.motion-enhanced .hero h1 strong{will-change:transform,opacity;transform-origin:50% 100%}
+body.motion-enhanced .section,body.motion-enhanced .preorder-cta{position:relative;overflow:clip}
+body.motion-enhanced .section-heading h2,body.motion-enhanced .section-heading .kicker,body.motion-enhanced .section-heading>p,body.motion-enhanced .lore-card,body.motion-enhanced .faction-card,body.motion-enhanced .dev-panel,body.motion-enhanced .faq-list,body.motion-enhanced .preorder-inner>*{will-change:transform,opacity}
+body.motion-enhanced .lore-card,body.motion-enhanced .faction-card,body.motion-enhanced .dev-panel{transform-style:preserve-3d;backface-visibility:hidden}
+body.motion-enhanced .cinematic-break{will-change:clip-path,transform;clip-path:inset(0)}
+body.motion-enhanced .cinematic-art,body.motion-enhanced .cinematic-copy{will-change:transform,opacity}
+.rd-scroll-progress{position:fixed;z-index:120;right:0;top:0;width:2px;height:100svh;pointer-events:none;transform-origin:50% 0;transform:scaleY(0);background:linear-gradient(to bottom,#e6bb71,#9d6127);box-shadow:0 0 14px rgba(211,155,75,.4);opacity:.88}
+.rd-scroll-orb{position:fixed;z-index:119;right:12px;bottom:18px;width:5px;height:5px;border-radius:50%;pointer-events:none;background:#d6a252;box-shadow:0 0 16px 4px rgba(214,162,82,.18);opacity:0;transform:scale(.5)}
+@media(hover:hover) and (pointer:fine){body.motion-enhanced .lore-card,body.motion-enhanced .faction-card{transition:border-color .25s ease,background-color .25s ease,box-shadow .25s ease}body.motion-enhanced .lore-card:hover,body.motion-enhanced .faction-card:hover{border-color:rgba(211,161,86,.36);box-shadow:0 24px 65px rgba(0,0,0,.25)}}
+@media(max-width:620px){.rd-scroll-progress{width:1px}.rd-scroll-orb{display:none}body.motion-enhanced .site-header.is-scrolled{backdrop-filter:blur(14px)}}
+@media(prefers-reduced-motion:reduce){.rd-scroll-progress,.rd-scroll-orb{display:none!important}body.motion-enhanced *{scroll-behavior:auto!important}body.motion-enhanced .hero-content,body.motion-enhanced .hero-video,body.motion-enhanced .hero-fallback,body.motion-enhanced .cinematic-art{transform:none!important}}
