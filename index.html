@@ -1,80 +1,67 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#120d09" />
-  <meta name="description" content="Realm Divided — a medieval Minecraft kingdom project where one fallen empire fractures into five rival factions." />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090604">
+  <meta name="description" content="Realm Divided — a medieval Minecraft kingdom project. Five factions. One broken empire.">
   <title>Realm Divided — Five Factions. One Broken Empire.</title>
-  <link rel="icon" type="image/webp" href="assets/favicon.webp" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="https://res.cloudinary.com/vitjnhhb/image/upload/v1789066659/realm-divided/realm-divided-logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
   <header class="site-header" id="top">
     <a class="brand" href="#top" aria-label="Realm Divided home">
-      <img src="assets/realm-divided-logo.webp" alt="Realm Divided crest" />
+      <img data-logo alt="Realm Divided crest">
       <span>Realm Divided</span>
     </a>
-
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Primary navigation">
       <a href="#realm">The Realm</a>
       <a href="#factions">Factions</a>
       <a href="#development">Development</a>
       <a href="#faq">FAQ</a>
-      <a class="nav-cta" href="https://github.com/drmacze/REALM-DIVIDED" target="_blank" rel="noreferrer">Development Log</a>
+      <a class="nav-cta" href="preorder.html">Pre-Order</a>
     </nav>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-bg" role="img" aria-label="Realm Divided medieval kingdom banner"></div>
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="https://res.cloudinary.com/vitjnhhb/image/upload/v1789066927/realm-divided/realm-divided-banner.jpg" aria-hidden="true">
+        <source src="assets/realm-divided-cinematic.mp4" type="video/mp4">
+      </video>
+      <div class="hero-fallback" aria-hidden="true"></div>
       <div class="hero-vignette" aria-hidden="true"></div>
       <div class="hero-content">
         <div class="eyebrow"><span class="status-dot"></span> Project in development</div>
-        <img class="hero-mark" src="assets/realm-divided-logo.webp" alt="Realm Divided logo" />
-        <h1 id="hero-title" class="sr-only">Realm Divided</h1>
-        <p class="hero-copy">An emperor dies without an heir. A continent fractures into five rival factions. Your allegiance will shape what rises from the ruins.</p>
+        <img class="hero-crest" data-logo alt="Realm Divided crest">
+        <p class="hero-kicker">Five factions · One broken empire</p>
+        <h1 id="hero-title"><span>Realm</span><strong>Divided</strong></h1>
+        <p class="hero-copy">The emperor is dead. No heir remains. Five powers now fight to decide what rises from the ruins.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#realm">Enter the Realm</a>
-          <a class="btn btn-ghost" href="#development">See Development</a>
+          <a class="btn btn-ghost" href="preorder.html">Pre-Order</a>
         </div>
         <p class="hero-note">COMING SOON · RELEASE DATE TO BE ANNOUNCED</p>
       </div>
-      <a class="scroll-cue" href="#realm" aria-label="Scroll to The Realm"><span></span>Discover</a>
+      <a class="scroll-cue" href="#realm"><span></span>Discover</a>
     </section>
 
     <section class="section realm-section" id="realm">
-      <div class="ornament" aria-hidden="true"><span></span><b>✦</b><span></span></div>
+      <div class="ornament"><span></span><b>✦</b><span></span></div>
       <div class="section-heading reveal">
         <p class="kicker">A throne left empty</p>
         <h2>One realm. Five claims.</h2>
-        <p>Realm Divided is a medieval kingdom project built around a continent shattered by succession. With the imperial line ended, old loyalties collapse and five powers begin writing their own future.</p>
+        <p>After the emperor dies without an heir, the continent fractures. Old loyalties collapse, rival banners rise, and every faction begins writing its own future.</p>
       </div>
-
       <div class="lore-grid">
-        <article class="lore-card reveal">
-          <span class="lore-number">01</span>
-          <h3>The Fallen Crown</h3>
-          <p>The emperor is gone, leaving no heir and no peaceful path to succession.</p>
-        </article>
-        <article class="lore-card reveal">
-          <span class="lore-number">02</span>
-          <h3>The Fractured Continent</h3>
-          <p>Five factions now hold different lands, ambitions, traditions, and visions of order.</p>
-        </article>
-        <article class="lore-card reveal">
-          <span class="lore-number">03</span>
-          <h3>Your Allegiance</h3>
-          <p>Players will be free to choose their faction and take part in the future of the divided realm.</p>
-        </article>
+        <article class="lore-card reveal"><span>01</span><h3>The Fallen Crown</h3><p>An empire without an heir has no peaceful path to succession.</p></article>
+        <article class="lore-card reveal"><span>02</span><h3>The Fractured Continent</h3><p>Five powers hold different lands, traditions, ambitions, and visions of order.</p></article>
+        <article class="lore-card reveal"><span>03</span><h3>Your Allegiance</h3><p>Choose where you stand and shape the future of the divided realm.</p></article>
       </div>
     </section>
 
@@ -82,105 +69,64 @@
       <div class="section-heading compact reveal">
         <p class="kicker">The five banners</p>
         <h2>Choose where you stand.</h2>
-        <p>Faction identities are still being developed. Their full names, territories, leaders, and histories will be revealed later.</p>
+        <p>The names, rulers, territories, and complete histories of the five factions remain sealed for now.</p>
       </div>
-
-      <div class="faction-row" aria-label="Five factions">
-        <article class="faction-card red reveal"><div class="sigil">I</div><h3>Faction I</h3><span>Lore reveal coming soon</span></article>
-        <article class="faction-card blue reveal"><div class="sigil">II</div><h3>Faction II</h3><span>Lore reveal coming soon</span></article>
-        <article class="faction-card green reveal"><div class="sigil">III</div><h3>Faction III</h3><span>Lore reveal coming soon</span></article>
-        <article class="faction-card gold reveal"><div class="sigil">IV</div><h3>Faction IV</h3><span>Lore reveal coming soon</span></article>
-        <article class="faction-card purple reveal"><div class="sigil">V</div><h3>Faction V</h3><span>Lore reveal coming soon</span></article>
+      <div class="faction-row">
+        <article class="faction-card red reveal"><div class="sigil">I</div><h3>Faction I</h3><span>Reveal coming soon</span></article>
+        <article class="faction-card blue reveal"><div class="sigil">II</div><h3>Faction II</h3><span>Reveal coming soon</span></article>
+        <article class="faction-card green reveal"><div class="sigil">III</div><h3>Faction III</h3><span>Reveal coming soon</span></article>
+        <article class="faction-card gold reveal"><div class="sigil">IV</div><h3>Faction IV</h3><span>Reveal coming soon</span></article>
+        <article class="faction-card purple reveal"><div class="sigil">V</div><h3>Faction V</h3><span>Reveal coming soon</span></article>
       </div>
     </section>
 
-    <section class="banner-break reveal" aria-label="Realm Divided promotional artwork">
-      <img src="assets/realm-divided-banner.webp" alt="Realm Divided banner showing five factions and the divided continent" />
-      <div class="banner-caption">
-        <p>Five factions · One broken empire</p>
-        <strong>A new era begins.</strong>
-      </div>
+    <section class="cinematic-break reveal">
+      <div class="cinematic-art" aria-hidden="true"></div>
+      <div class="cinematic-copy"><p>Five factions · One broken throne</p><h2>A new era begins.</h2><span>Different lands. Different people. One continent.</span></div>
     </section>
 
     <section class="section development-section" id="development">
-      <div class="section-heading reveal">
-        <p class="kicker">Behind the gates</p>
-        <h2>Currently in development.</h2>
-        <p>This website is intentionally limited while Realm Divided is being built. More systems, lore, media, and project pages will open as they are ready.</p>
-      </div>
-
+      <div class="section-heading reveal"><p class="kicker">Behind the gates</p><h2>Currently in development.</h2><p>Realm Divided is still being built. This site intentionally reveals only the parts of the project that are ready to be shown.</p></div>
       <div class="dev-panel reveal">
-        <div class="dev-state"><span></span><div><small>Current state</small><strong>Pre-release development</strong></div></div>
-        <div class="dev-list">
-          <div><b>World & Kingdom Design</b><span>In development</span></div>
-          <div><b>Faction Lore</b><span>In development</span></div>
-          <div><b>Gameplay Systems</b><span>In development</span></div>
-          <div><b>Public Release</b><span>To be announced</span></div>
-        </div>
-        <a class="btn btn-outline" href="https://github.com/drmacze/REALM-DIVIDED" target="_blank" rel="noreferrer">View project repository</a>
+        <div class="dev-state"><i></i><div><small>Current state</small><strong>Pre-release development</strong></div></div>
+        <div class="dev-list"><div><b>World & Kingdom Design</b><span>In development</span></div><div><b>Faction Lore</b><span>In development</span></div><div><b>Gameplay Systems</b><span>In development</span></div><div><b>Public Release</b><span>To be announced</span></div></div>
       </div>
     </section>
 
     <section class="section faq-section" id="faq">
-      <div class="section-heading compact reveal">
-        <p class="kicker">Questions from the realm</p>
-        <h2>FAQ</h2>
-      </div>
-
+      <div class="section-heading compact reveal"><p class="kicker">Questions from the realm</p><h2>FAQ</h2></div>
       <div class="faq-list reveal">
-        <details>
-          <summary>What is Realm Divided?<span>+</span></summary>
-          <p>A medieval Minecraft project set on a large continent that split into five factions after its emperor died without an heir.</p>
-        </details>
-        <details>
-          <summary>Can players choose a faction?<span>+</span></summary>
-          <p>Yes. The core concept is built around allowing players to align themselves with any of the five factions.</p>
-        </details>
-        <details>
-          <summary>Is Realm Divided available to download now?<span>+</span></summary>
-          <p>Not yet. The project is still in development and no public release date has been announced.</p>
-        </details>
-        <details>
-          <summary>Which Minecraft edition and versions will be supported?<span>+</span></summary>
-          <p>Final platform and version support will be announced when the project is closer to release.</p>
-        </details>
-        <details>
-          <summary>When will the five factions be fully revealed?<span>+</span></summary>
-          <p>Faction names, leaders, territories, and detailed lore will be revealed gradually as development progresses.</p>
-        </details>
+        <details><summary>What is Realm Divided?<span>+</span></summary><p>A medieval Minecraft project set on a large continent split into five rival factions after its emperor dies without an heir.</p></details>
+        <details><summary>Can players choose a faction?<span>+</span></summary><p>Yes. The core concept is built around allowing players to align themselves with any of the five factions.</p></details>
+        <details><summary>Can I pre-order now?<span>+</span></summary><p>The pre-order page is now available as a project gate, but checkout and payment are not open yet. Pricing and edition details will be announced later.</p></details>
+        <details><summary>Which Minecraft edition will be supported?<span>+</span></summary><p>Final platform and version support will be announced closer to release.</p></details>
+        <details><summary>When will the factions be fully revealed?<span>+</span></summary><p>Faction names, leaders, territories, and detailed lore will be revealed gradually during development.</p></details>
       </div>
     </section>
 
-    <section class="closing-cta">
-      <div class="closing-inner reveal">
-        <img src="assets/realm-divided-logo.webp" alt="" aria-hidden="true" />
-        <p class="kicker">The crown is broken</p>
-        <h2>The realm is waiting.</h2>
-        <p>Development continues. More from the five factions will be revealed soon.</p>
-        <a class="btn btn-primary" href="https://github.com/drmacze/REALM-DIVIDED" target="_blank" rel="noreferrer">Follow Development</a>
+    <section class="preorder-cta" id="preorder">
+      <div class="preorder-inner reveal">
+        <img data-logo alt="Realm Divided crest">
+        <p class="kicker">The gates will open</p>
+        <h2>Claim your place in the realm.</h2>
+        <p>Pre-order information, pricing, editions, and launch details will be revealed when they are ready.</p>
+        <a class="btn btn-primary" href="preorder.html">Pre-Order</a>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="footer-top">
-      <a class="footer-brand" href="#top"><img src="assets/realm-divided-logo.webp" alt="Realm Divided crest" /><div><strong>Realm Divided</strong><span>Five factions. One broken empire.</span></div></a>
-      <div class="footer-links"><a href="#realm">The Realm</a><a href="#factions">Factions</a><a href="#development">Development</a><a href="#faq">FAQ</a></div>
+      <a class="footer-brand" href="#top"><img data-logo alt="Realm Divided crest"><div><strong>Realm Divided</strong><span>Five factions. One broken empire.</span></div></a>
+      <div class="footer-links"><a href="#realm">The Realm</a><a href="#factions">Factions</a><a href="#development">Development</a><a href="#faq">FAQ</a><a href="preorder.html">Pre-Order</a></div>
     </div>
-
-    <div class="platform-strip" aria-label="Minecraft, Xbox and Microsoft brand references">
-      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer" aria-label="Xbox"><img src="https://cdn.simpleicons.org/xbox/FFFFFF" alt="Xbox" /><span>XBOX</span></a>
-      <a href="https://www.minecraft.net/" target="_blank" rel="noreferrer" aria-label="Minecraft"><img src="https://cdn.simpleicons.org/minecraft/FFFFFF" alt="Minecraft" /><span>MINECRAFT</span></a>
-      <a href="https://www.microsoft.com/" target="_blank" rel="noreferrer" aria-label="Microsoft"><img src="https://cdn.simpleicons.org/microsoft/FFFFFF" alt="Microsoft" /><span>Microsoft</span></a>
+    <div class="platform-strip" aria-label="Brand references">
+      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer"><img class="xbox-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Xbox%20Logo.svg" alt="Xbox"></a>
+      <a href="https://www.minecraft.net/" target="_blank" rel="noreferrer"><img class="minecraft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Minecraft%20Logo-en.svg" alt="Minecraft"></a>
+      <a href="https://www.microsoft.com/" target="_blank" rel="noreferrer"><img class="microsoft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Microsoft.svg" alt="Microsoft"></a>
     </div>
-
-    <div class="legal">
-      <p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p>
-      <p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p>
-      <span>© <span id="year"></span> Realm Divided. Project in development.</span>
-    </div>
+    <div class="legal"><p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p><p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p><span>© <span id="year"></span> Realm Divided. Project in development.</span></div>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
