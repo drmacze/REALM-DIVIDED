@@ -9,3 +9,20 @@ document.querySelectorAll('.faq-list details').forEach(item=>item.addEventListen
 const video=document.querySelector('.hero-video');
 if(video){const play=()=>{if(!video.classList.contains('video-unavailable'))video.play().catch(()=>{})};document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()})}
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
+
+// Progressive enhancement: load the motion stack only after the core page is usable.
+(() => {
+  const loadScript=(src)=>new Promise((resolve,reject)=>{
+    const existing=[...document.scripts].find(s=>s.src===src);
+    if(existing){if(existing.dataset.loaded==='true')return resolve();existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}
+    const s=document.createElement('script');s.src=src;s.defer=true;s.crossOrigin='anonymous';s.onload=()=>{s.dataset.loaded='true';resolve()};s.onerror=reject;document.head.appendChild(s);
+  });
+  (async()=>{
+    try{
+      await loadScript('https://unpkg.com/lenis@1.3.26/dist/lenis.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js');
+      await loadScript('motion.js');
+    }catch(err){console.warn('Realm Divided motion stack unavailable; native scrolling remains active.',err)}
+  })();
+})();
