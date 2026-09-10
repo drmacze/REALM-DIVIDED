@@ -1,6 +1,7 @@
 /* Realm Divided — clean hero refinements */
 .site-header .menu-toggle{display:none!important}
 @media(max-width:820px){.site-header .nav{display:none!important}}
+.hero .eyebrow,.hero .hero-copy,.hero .hero-actions,.hero .hero-note{display:none!important}
 .hero-content{gap:0}
 .hero-content .hero-crest{margin-bottom:22px}
 .hero-content .hero-kicker{margin-bottom:10px}
