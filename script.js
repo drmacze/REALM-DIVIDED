@@ -7,5 +7,5 @@ const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(ent
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 document.querySelectorAll('.faq-list details').forEach(item=>item.addEventListener('toggle',()=>{if(item.open)document.querySelectorAll('.faq-list details').forEach(other=>{if(other!==item)other.open=false})}));
 const video=document.querySelector('.hero-video');
-if(video){video.addEventListener('canplay',()=>document.body.classList.add('video-ready'),{once:true});video.addEventListener('error',()=>video.style.display='none');const play=()=>video.play().catch(()=>{});play();document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()})}
+if(video){const play=()=>{if(!video.classList.contains('video-unavailable'))video.play().catch(()=>{})};document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()})}
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
