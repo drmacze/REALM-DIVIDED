@@ -1,5 +1,9 @@
 const ASSETS={logo:'https://res.cloudinary.com/vitjnhhb/image/upload/v1789066659/realm-divided/realm-divided-logo.jpg'};
 document.querySelectorAll('[data-logo]').forEach(img=>{img.src=ASSETS.logo});
+
+// Load clean homepage refinements without touching the restored Factions scroll engine.
+(()=>{if(!document.querySelector('link[data-home-clean]')){const l=document.createElement('link');l.rel='stylesheet';l.href='home-clean.css?v=rd13';l.dataset.homeClean='1';document.head.appendChild(l)}})();
+
 const menuButton=document.querySelector('.menu-toggle');
 const nav=document.querySelector('.nav');
 if(menuButton&&nav){menuButton.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menuButton.setAttribute('aria-expanded','false')}))}
@@ -26,3 +30,6 @@ const year=document.getElementById('year');if(year)year.textContent=new Date().g
     }catch(err){console.warn('Realm Divided motion stack unavailable; native scrolling remains active.',err)}
   })();
 })();
+
+// Resume soundtrack after the explicit Return to the Realm gesture from pre-order.
+(()=>{const s=document.createElement('script');s.src='music-resume.js?v=rd13';s.defer=true;document.head.appendChild(s)})();
