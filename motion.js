@@ -3,20 +3,21 @@
 
   const { gsap, ScrollTrigger, Lenis } = window;
   gsap.registerPlugin(ScrollTrigger);
-  document.body.classList.add('motion-enhanced');
+  document.body.classList.add('motion-enhanced', 'cinematic-v2');
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia('(pointer: coarse)').matches;
+  const clamp = gsap.utils.clamp;
 
   const lenis = new Lenis({
     autoRaf: false,
-    lerp: coarse ? 0.09 : 0.072,
+    lerp: coarse ? 0.082 : 0.065,
     smoothWheel: true,
     syncTouch: coarse,
-    syncTouchLerp: 0.08,
-    touchInertiaExponent: 1.55,
-    wheelMultiplier: 0.92,
-    touchMultiplier: 1.04,
+    syncTouchLerp: 0.075,
+    touchInertiaExponent: 1.65,
+    wheelMultiplier: 0.9,
+    touchMultiplier: 1.02,
     anchors: { offset: -72 },
     overscroll: true,
     stopInertiaOnNavigate: true
@@ -24,46 +25,120 @@
 
   window.realmLenis = lenis;
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.add(time => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  const progress = document.createElement('div');
-  progress.className = 'rd-scroll-progress';
-  progress.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(progress);
+  const make = (tag, className, parent = document.body) => {
+    const el = document.createElement(tag);
+    el.className = className;
+    el.setAttribute('aria-hidden', 'true');
+    parent.appendChild(el);
+    return el;
+  };
 
-  const orb = document.createElement('div');
-  orb.className = 'rd-scroll-orb';
-  orb.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(orb);
-
-  const chapter = document.createElement('div');
-  chapter.className = 'rd-chapter';
-  chapter.setAttribute('aria-hidden', 'true');
+  const progress = make('div', 'rd-scroll-progress');
+  const orb = make('div', 'rd-scroll-orb');
+  const chapter = make('div', 'rd-chapter');
   chapter.textContent = 'Realm Divided';
-  document.body.appendChild(chapter);
+  const velocityBar = make('div', 'rd-velocity-bar');
 
-  const header = document.querySelector('.site-header');
+  const hero = document.querySelector('.hero');
+  const heroContent = document.querySelector('.hero-content');
+  const heroMedia = document.querySelector('.hero-video');
   const story = document.querySelector('.scroll-story');
+  const storySticky = document.querySelector('.story-sticky');
+  const storyStage = document.querySelector('.story-stage');
+  const storyRings = document.querySelector('.story-rings');
+  const header = document.querySelector('.site-header');
 
-  lenis.on('scroll', ({ progress: p, velocity }) => {
-    gsap.set(progress, { scaleY: Math.max(0, Math.min(1, p || 0)) });
-    if (header) header.classList.toggle('is-scrolled', (p || 0) > 0.008);
+  if (hero) {
+    make('div', 'hero-interactive-light', hero);
+    make('div', 'hero-scanlines', hero);
+  }
+
+  if (storySticky) {
+    make('div', 'story-light', storySticky);
+    const cross = make('div', 'story-crosshair', storySticky);
+    cross.innerHTML = '<i></i><i></i>';
+    const final = make('div', 'story-final', storyStage || storySticky);
+    final.innerHTML = '<span>THE CROWN IS GONE</span><strong>CHOOSE YOUR ALLEGIANCE</strong>';
+    const particles = make('div', 'story-particles', storySticky);
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('i');
+      p.style.setProperty('--i', i);
+      p.style.setProperty('--x', `${8 + ((i * 37) % 84)}%`);
+      p.style.setProperty('--y', `${8 + ((i * 53) % 82)}%`);
+      p.style.setProperty('--s', `${1 + (i % 3)}px`);
+      particles.appendChild(p);
+    }
+  }
+
+  document.documentElement.style.setProperty('--rd-pointer-x', '50%');
+  document.documentElement.style.setProperty('--rd-pointer-y', '50%');
+  document.documentElement.style.setProperty('--rd-px', '0');
+  document.documentElement.style.setProperty('--rd-py', '0');
+
+  const stageRotX = storyStage ? gsap.quickTo(storyStage, 'rotationX', { duration: .75, ease: 'power3.out' }) : null;
+  const stageRotY = storyStage ? gsap.quickTo(storyStage, 'rotationY', { duration: .75, ease: 'power3.out' }) : null;
+  const ringsX = storyRings ? gsap.quickTo(storyRings, 'x', { duration: .8, ease: 'power3.out' }) : null;
+  const ringsY = storyRings ? gsap.quickTo(storyRings, 'y', { duration: .8, ease: 'power3.out' }) : null;
+  const heroX = heroContent ? gsap.quickTo(heroContent, 'x', { duration: .9, ease: 'power3.out' }) : null;
+  const mediaX = heroMedia ? gsap.quickTo(heroMedia, 'x', { duration: 1.15, ease: 'power3.out' }) : null;
+
+  function applyPointer(clientX, clientY) {
+    const nx = clamp(-1, 1, (clientX / window.innerWidth - .5) * 2);
+    const ny = clamp(-1, 1, (clientY / window.innerHeight - .5) * 2);
+    document.documentElement.style.setProperty('--rd-pointer-x', `${clientX}px`);
+    document.documentElement.style.setProperty('--rd-pointer-y', `${clientY}px`);
+    document.documentElement.style.setProperty('--rd-px', nx.toFixed(3));
+    document.documentElement.style.setProperty('--rd-py', ny.toFixed(3));
+    if (reduced) return;
+    if (stageRotX) stageRotX(-ny * (coarse ? 1.6 : 3.4));
+    if (stageRotY) stageRotY(nx * (coarse ? 1.8 : 4.2));
+    if (ringsX) ringsX(nx * (coarse ? 6 : 16));
+    if (ringsY) ringsY(ny * (coarse ? 5 : 12));
+    if (heroX) heroX(nx * (coarse ? 3 : 10));
+    if (mediaX) mediaX(nx * (coarse ? -2 : -8));
+  }
+
+  window.addEventListener('pointermove', e => applyPointer(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('touchmove', e => {
+    if (e.touches && e.touches[0]) applyPointer(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+
+  window.addEventListener('pointerdown', e => {
+    if (reduced) return;
+    const pulse = make('span', 'rd-tap-pulse');
+    pulse.style.left = `${e.clientX}px`;
+    pulse.style.top = `${e.clientY}px`;
+    gsap.fromTo(pulse, { scale: .2, opacity: .65 }, { scale: 5, opacity: 0, duration: .75, ease: 'power2.out', onComplete: () => pulse.remove() });
+  }, { passive: true });
+
+  const velocitySet = velocityBar ? gsap.quickTo(velocityBar, 'scaleY', { duration: .18, ease: 'power2.out' }) : null;
+  const stageSkew = storyStage ? gsap.quickTo(storyStage, 'skewY', { duration: .28, ease: 'power2.out' }) : null;
+
+  lenis.on('scroll', ({ progress: p, velocity = 0, direction = 0 }) => {
+    const v = clamp(0, 30, Math.abs(velocity));
+    gsap.set(progress, { scaleY: clamp(0, 1, p || 0) });
+    if (header) header.classList.toggle('is-scrolled', (p || 0) > .008);
+    document.documentElement.style.setProperty('--rd-scroll-velocity', v.toFixed(2));
+    document.documentElement.style.setProperty('--rd-scroll-direction', String(direction || 0));
     if (!reduced) {
-      const v = Math.min(Math.abs(velocity || 0), 28);
-      document.documentElement.style.setProperty('--rd-scroll-velocity', String(v));
-      if (orb) gsap.to(orb, { opacity: v > 0.9 ? 0.8 : 0, scale: 0.55 + v / 16, duration: 0.24, overwrite: true });
+      if (orb) gsap.to(orb, { opacity: v > .8 ? .82 : 0, scale: .55 + v / 13, duration: .22, overwrite: true });
+      if (velocitySet) velocitySet(clamp(.08, 1, v / 18));
+      if (stageSkew) stageSkew(clamp(-1.1, 1.1, velocity * .06));
     }
   });
 
   function splitChars(el) {
-    if (!el || el.dataset.split === 'true') return [];
+    if (!el) return [];
+    if (el.dataset.split === 'true') return [...el.querySelectorAll('.char')];
     const label = el.getAttribute('aria-label') || el.textContent.trim();
     const chars = [...el.textContent];
     el.textContent = '';
     el.setAttribute('aria-label', label);
     el.dataset.split = 'true';
-    return chars.map((char) => {
+    return chars.map(char => {
       const span = document.createElement('span');
       span.className = 'char';
       span.setAttribute('aria-hidden', 'true');
@@ -82,174 +157,191 @@
     return;
   }
 
-  /* Short opening sequence. */
   const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
   intro
-    .from('.hero .eyebrow', { y: 24, opacity: 0, duration: 0.72 })
-    .from('.hero-crest', { y: 20, scale: 0.68, rotate: -4, opacity: 0, duration: 0.82 }, '-=.42')
-    .from('.hero-kicker', { y: 18, opacity: 0, duration: 0.58 }, '-=.46')
-    .from('.hero h1 span', { yPercent: 95, rotateX: -30, opacity: 0, duration: 0.92 }, '-=.38')
+    .from('.hero .eyebrow', { y: 24, opacity: 0, duration: .72 })
+    .from('.hero-crest', { y: 20, scale: .68, rotate: -4, opacity: 0, duration: .82 }, '-=.42')
+    .from('.hero-kicker', { y: 18, opacity: 0, duration: .58 }, '-=.46')
+    .from('.hero h1 span', { yPercent: 95, rotateX: -30, opacity: 0, duration: .92 }, '-=.38')
     .from('.hero h1 strong', { yPercent: 105, rotateX: -30, opacity: 0, duration: 1 }, '-=.8')
-    .from('.hero-copy', { y: 28, opacity: 0, duration: 0.68 }, '-=.55')
-    .from('.hero-actions .btn', { y: 22, opacity: 0, stagger: 0.08, duration: 0.52 }, '-=.45')
-    .from('.hero-note,.scroll-cue', { opacity: 0, y: 12, duration: 0.48 }, '-=.28');
+    .from('.hero-copy', { y: 28, opacity: 0, duration: .68 }, '-=.55')
+    .from('.hero-actions .btn', { y: 22, opacity: 0, stagger: .08, duration: .52 }, '-=.45')
+    .from('.hero-note,.scroll-cue', { opacity: 0, y: 12, duration: .48 }, '-=.28');
 
-  /* Hero becomes a moving layer instead of a static first screen. */
-  const heroTL = gsap.timeline({
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.45 }
-  });
-  heroTL
-    .to('.hero-content', { yPercent: -18, scale: 0.88, opacity: 0.12, ease: 'none' }, 0)
-    .to('.hero h1', { scale: 1.15, letterSpacing: '0.03em', ease: 'none' }, 0)
-    .to('.hero-video,.hero-fallback', { yPercent: 10, scale: 1.15, ease: 'none' }, 0)
-    .to('.hero-vignette', { opacity: 1, ease: 'none' }, 0)
-    .to('.scroll-cue', { y: 34, opacity: 0, ease: 'none' }, 0);
+  if (hero) {
+    const heroTL = gsap.timeline({
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: .32 }
+    });
+    heroTL
+      .to('.hero-content', { yPercent: -22, scale: .82, opacity: .06, filter: 'blur(4px)', ease: 'none' }, 0)
+      .to('.hero h1', { scale: 1.22, letterSpacing: '.04em', ease: 'none' }, 0)
+      .to('.hero-video,.hero-fallback', { yPercent: 12, scale: 1.2, filter: 'saturate(.8) contrast(1.08) brightness(.72)', ease: 'none' }, 0)
+      .to('.hero-vignette', { opacity: 1, ease: 'none' }, 0)
+      .to('.hero-interactive-light', { opacity: .18, scale: 1.25, ease: 'none' }, 0)
+      .to('.scroll-cue', { y: 38, opacity: 0, ease: 'none' }, 0);
+  }
 
-  /* Lenis-style pinned typography story: zoom through the words as scroll advances. */
+  const oneChars = splitChars(document.querySelector('.story-word-one'));
   const fiveChars = splitChars(document.querySelector('.story-word-two'));
   const dividedChars = splitChars(document.querySelector('.story-word-three'));
+
   if (story) {
+    gsap.set('.story-word-one,.story-word-two,.story-word-three', { opacity: 1 });
+    gsap.set(oneChars, { opacity: 0, yPercent: 70, z: -120, rotateX: -35 });
+    gsap.set(fiveChars, { opacity: 0, yPercent: 110, z: -160, rotateX: -50 });
+    gsap.set(dividedChars, { opacity: 0, yPercent: 115, z: -200, rotateX: -55 });
+    gsap.set('.story-caption,.story-factions,.story-final', { opacity: 0 });
+
     const storyTL = gsap.timeline({
       scrollTrigger: {
         trigger: story,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.38,
+        scrub: .26,
         invalidateOnRefresh: true
       }
     });
 
-    gsap.set('.story-word-one', { scale: 0.48, opacity: 0, letterSpacing: '0.04em' });
-    gsap.set(fiveChars, { yPercent: 120, rotate: 9, opacity: 0 });
-    gsap.set(dividedChars, { yPercent: 125, rotateX: -45, opacity: 0 });
-    gsap.set('.story-caption,.story-factions', { opacity: 0 });
-
     storyTL
-      .to('.story-word-one', { scale: 1, opacity: 1, letterSpacing: '-0.045em', duration: 1.2, ease: 'power2.out' }, 0)
-      .to('.story-grid', { rotate: 5, scale: 1.35, opacity: 0.2, duration: 3.8, ease: 'none' }, 0)
-      .to('.story-rings i:nth-child(1)', { scale: 1.6, opacity: 0.18, duration: 2.2, ease: 'none' }, 0.2)
-      .to('.story-rings i:nth-child(2)', { scale: 2.1, opacity: 0.1, duration: 2.3, ease: 'none' }, 0.2)
-      .to('.story-rings i:nth-child(3)', { scale: 2.8, opacity: 0, duration: 2.4, ease: 'none' }, 0.2)
-      .to('.story-kicker', { y: -70, opacity: 0, duration: 0.7 }, 0.85)
-      .to('.story-word-one', { scale: 7.2, opacity: 0, letterSpacing: '0.02em', duration: 1.45, ease: 'power2.in' }, 1.15)
-      .to(fiveChars, { yPercent: 0, rotate: 0, opacity: 1, stagger: 0.035, duration: 0.95, ease: 'power3.out' }, 2.3)
-      .fromTo('.story-factions span', { y: 80, scale: 0.5, opacity: 0, rotate: -8 }, { y: 0, scale: 1, opacity: 1, rotate: 0, stagger: 0.09, duration: 0.9, ease: 'back.out(1.5)' }, 2.65)
-      .to('.story-factions', { opacity: 1, duration: 0.25 }, 2.65)
-      .to('.story-caption', { opacity: 1, y: -8, duration: 0.7 }, 2.95)
-      .to('.story-word-two', { scale: 1.45, letterSpacing: '0.015em', duration: 1.1, ease: 'power2.inOut' }, 3.25)
-      .to('.story-word-two,.story-factions,.story-caption', { opacity: 0, y: -70, duration: 0.72, ease: 'power2.in' }, 4.05)
-      .to(dividedChars, { yPercent: 0, rotateX: 0, opacity: 1, stagger: 0.028, duration: 1, ease: 'power3.out' }, 4.45)
-      .to('.story-word-three', { opacity: 1, scale: 1, duration: 0.3 }, 4.45)
-      .to('.story-word-three', { scale: 2.6, letterSpacing: '0.03em', opacity: 0.2, duration: 1.6, ease: 'power2.in' }, 5.35)
-      .to('.story-grid', { scale: 1.7, rotate: -2, opacity: 0.05, duration: 1.3, ease: 'none' }, 5.45);
+      .to(oneChars, { opacity: 1, yPercent: 0, z: 0, rotateX: 0, stagger: .028, duration: .9, ease: 'power3.out' }, 0)
+      .fromTo('.story-kicker', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .55 }, .08)
+      .to('.story-grid', { rotate: 3, scale: 1.24, opacity: .19, duration: 2.1, ease: 'none' }, 0)
+      .to('.story-rings i:nth-child(1)', { scale: 1.38, opacity: .24, duration: 1.75, ease: 'none' }, .15)
+      .to('.story-rings i:nth-child(2)', { scale: 1.75, opacity: .17, duration: 1.9, ease: 'none' }, .15)
+      .to('.story-rings i:nth-child(3)', { scale: 2.25, opacity: .08, duration: 2, ease: 'none' }, .15)
+      .to('.story-word-one', { scale: 1.12, duration: .6, ease: 'power2.inOut' }, .85)
+      .to('.story-kicker', { opacity: 0, y: -50, duration: .42 }, 1.05)
+      .to('.story-word-one', { scale: coarse ? 5.5 : 7.4, opacity: 0, filter: 'blur(5px)', duration: 1.05, ease: 'power2.in' }, 1.3)
+      .to(fiveChars, { opacity: 1, yPercent: 0, z: 0, rotateX: 0, stagger: .025, duration: .92, ease: 'power3.out' }, 1.95)
+      .fromTo('.story-factions span', { y: 70, scale: .45, opacity: 0, rotate: -10 }, { y: 0, scale: 1, opacity: 1, rotate: 0, stagger: .075, duration: .8, ease: 'back.out(1.4)' }, 2.2)
+      .to('.story-factions', { opacity: 1, duration: .18 }, 2.2)
+      .fromTo('.story-caption', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: .62, ease: 'power2.out' }, 2.5)
+      .to('.story-word-two', { scale: 1.24, letterSpacing: '.012em', duration: .8, ease: 'power2.inOut' }, 2.9)
+      .to('.story-factions span', { y: i => i % 2 ? -12 : 12, rotate: i => i % 2 ? 2 : -2, duration: .8, stagger: .04, ease: 'sine.inOut' }, 3)
+      .to('.story-word-two,.story-factions,.story-caption', { opacity: 0, y: -54, filter: 'blur(3px)', duration: .68, ease: 'power2.in' }, 3.65)
+      .to(dividedChars, { opacity: 1, yPercent: 0, z: 0, rotateX: 0, stagger: .022, duration: .9, ease: 'power3.out' }, 3.95)
+      .to('.story-word-three', { scale: 1.06, duration: .5 }, 4.4)
+      .to('.story-rings i', { scale: i => 1.2 + i * .65, opacity: .07, duration: 1.2, stagger: .05, ease: 'none' }, 4.25)
+      .to('.story-word-three', { scale: coarse ? 2.25 : 3.05, letterSpacing: '.025em', opacity: .11, filter: 'blur(2px)', duration: 1.15, ease: 'power2.in' }, 4.85)
+      .fromTo('.story-final', { opacity: 0, y: 35, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: .72, ease: 'power3.out' }, 5.2)
+      .to('.story-grid', { scale: 1.62, rotate: -2, opacity: .06, duration: 1.3, ease: 'none' }, 5.05)
+      .to('.story-final', { letterSpacing: '.045em', duration: .8, ease: 'none' }, 5.55);
 
     ScrollTrigger.create({
       trigger: story,
       start: 'top 72%',
       end: 'bottom 28%',
-      onEnter: () => gsap.to(chapter, { opacity: 1, duration: 0.3 }),
-      onLeave: () => gsap.to(chapter, { opacity: 0, duration: 0.3 }),
-      onEnterBack: () => gsap.to(chapter, { opacity: 1, duration: 0.3 }),
-      onLeaveBack: () => gsap.to(chapter, { opacity: 0, duration: 0.3 })
+      onEnter: () => gsap.to(chapter, { opacity: 1, duration: .3 }),
+      onLeave: () => gsap.to(chapter, { opacity: 0, duration: .3 }),
+      onEnterBack: () => gsap.to(chapter, { opacity: 1, duration: .3 }),
+      onLeaveBack: () => gsap.to(chapter, { opacity: 0, duration: .3 })
     });
   }
 
-  /* Section copy gets scroll-linked scale rather than only entrance fades. */
-  document.querySelectorAll('.section-heading').forEach((heading) => {
+  document.querySelectorAll('.section-heading').forEach(heading => {
     const parts = heading.querySelectorAll(':scope > .kicker, :scope > h2, :scope > p');
     gsap.fromTo(parts,
-      { y: 55, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: 'power3.out', scrollTrigger: { trigger: heading, start: 'top 84%', once: true } }
+      { y: 58, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: heading, start: 'top 84%', once: true } }
     );
     const h2 = heading.querySelector('h2');
-    if (h2) gsap.fromTo(h2, { scale: 0.82 }, { scale: 1.06, ease: 'none', scrollTrigger: { trigger: heading, start: 'top 92%', end: 'bottom 30%', scrub: 0.7 } });
+    if (h2) gsap.fromTo(h2, { scale: .8 }, { scale: 1.07, ease: 'none', scrollTrigger: { trigger: heading, start: 'top 94%', end: 'bottom 28%', scrub: .55 } });
   });
 
   gsap.fromTo('.lore-card',
-    { y: 90, rotateX: 10, opacity: 0, scale: 0.94 },
-    { y: 0, rotateX: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.11, ease: 'power3.out', scrollTrigger: { trigger: '.lore-grid', start: 'top 84%', once: true } }
+    { y: 92, rotateX: 12, opacity: 0, scale: .93 },
+    { y: 0, rotateX: 0, opacity: 1, scale: 1, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.lore-grid', start: 'top 84%', once: true } }
   );
+  gsap.to('.lore-card:nth-child(1)', { yPercent: -9, rotateZ: -1.2, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: .72 } });
+  gsap.to('.lore-card:nth-child(2)', { yPercent: 6, scale: 1.04, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: .72 } });
+  gsap.to('.lore-card:nth-child(3)', { yPercent: -6, rotateZ: 1.2, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: .72 } });
 
-  gsap.to('.lore-card:nth-child(1)', { yPercent: -8, rotateZ: -1.1, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
-  gsap.to('.lore-card:nth-child(2)', { yPercent: 5, scale: 1.035, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
-  gsap.to('.lore-card:nth-child(3)', { yPercent: -5, rotateZ: 1.1, ease: 'none', scrollTrigger: { trigger: '.lore-grid', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
-
-  /* The five factions become a pinned horizontal journey. */
   const factionSection = document.querySelector('.factions-section');
   const factionRow = document.querySelector('.faction-row');
-  if (factionSection && factionRow) {
-    gsap.fromTo('.faction-card',
-      { y: 85, opacity: 0, scale: 0.92, rotateY: -5 },
-      { y: 0, opacity: 1, scale: 1, rotateY: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', scrollTrigger: { trigger: factionSection, start: 'top 88%', once: true } }
+  const factionCards = [...document.querySelectorAll('.faction-card')];
+  if (factionSection && factionRow && factionCards.length) {
+    gsap.fromTo(factionCards,
+      { y: 85, opacity: 0, scale: .9, rotateY: -7 },
+      { y: 0, opacity: 1, scale: 1, rotateY: 0, duration: .9, stagger: .075, ease: 'power3.out', scrollTrigger: { trigger: factionSection, start: 'top 88%', once: true } }
     );
 
-    const factionTravel = () => Math.max(0, factionRow.scrollWidth - window.innerWidth + window.innerWidth * 0.12);
-    gsap.to(factionRow, {
+    const factionTravel = () => Math.max(0, factionRow.scrollWidth - window.innerWidth + window.innerWidth * .1);
+    const railTween = gsap.to(factionRow, {
       x: () => -factionTravel(),
       ease: 'none',
       scrollTrigger: {
         trigger: factionSection,
         start: 'top top',
-        end: () => `+=${Math.max(900, factionTravel() * 1.08)}`,
+        end: () => `+=${Math.max(900, factionTravel() * 1.12)}`,
         pin: true,
-        scrub: 0.5,
+        scrub: .35,
         anticipatePin: 1,
-        invalidateOnRefresh: true
+        invalidateOnRefresh: true,
+        onUpdate: () => {
+          const center = window.innerWidth / 2;
+          factionCards.forEach(card => {
+            const r = card.getBoundingClientRect();
+            const d = Math.abs((r.left + r.width / 2) - center);
+            card.classList.toggle('is-active', d < r.width * .55);
+          });
+        }
       }
     });
 
-    gsap.to('.faction-card:nth-child(odd)', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: factionSection, start: 'top top', end: 'bottom top', scrub: 0.8 } });
-    gsap.to('.faction-card:nth-child(even)', { yPercent: 5, ease: 'none', scrollTrigger: { trigger: factionSection, start: 'top top', end: 'bottom top', scrub: 0.8 } });
+    factionCards.forEach((card, i) => {
+      gsap.to(card, {
+        rotateZ: i % 2 ? .8 : -.8,
+        yPercent: i % 2 ? 5 : -6,
+        ease: 'none',
+        scrollTrigger: { trigger: factionSection, start: 'top top', end: () => railTween.scrollTrigger.end, scrub: .7 }
+      });
+    });
   }
 
-  /* Cinematic panel expands to occupy the screen, then its headline zooms through the viewer. */
   const cinematic = document.querySelector('.cinematic-break');
   if (cinematic) {
     const cinematicTL = gsap.timeline({
-      scrollTrigger: {
-        trigger: cinematic,
-        start: 'top top',
-        end: '+=120%',
-        pin: true,
-        scrub: 0.5,
-        anticipatePin: 1
-      }
+      scrollTrigger: { trigger: cinematic, start: 'top top', end: '+=135%', pin: true, scrub: .36, anticipatePin: 1 }
     });
     cinematicTL
-      .fromTo(cinematic, { clipPath: 'inset(8% 5% 8% 5%)', scale: 0.92, borderRadius: 28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, borderRadius: 0, duration: 1.1, ease: 'power2.out' }, 0)
-      .fromTo('.cinematic-art', { scale: 1.22, yPercent: -5 }, { scale: 1.03, yPercent: 4, duration: 2.3, ease: 'none' }, 0)
-      .fromTo('.cinematic-copy', { yPercent: 35, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }, 0.45)
-      .fromTo('.cinematic-copy h2', { scale: 0.72, transformOrigin: '0% 50%' }, { scale: 1, duration: 0.8, ease: 'power2.out' }, 0.55)
-      .to('.cinematic-copy h2', { scale: coarse ? 2.5 : 3.4, xPercent: coarse ? -18 : -28, opacity: 0.05, duration: 1.05, ease: 'power2.in' }, 1.45)
-      .to('.cinematic-copy p,.cinematic-copy span', { y: -55, opacity: 0, duration: 0.6 }, 1.55);
+      .fromTo(cinematic, { clipPath: 'inset(10% 6% 10% 6%)', scale: .9, borderRadius: 32 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, borderRadius: 0, duration: 1, ease: 'power2.out' }, 0)
+      .fromTo('.cinematic-art', { scale: 1.28, yPercent: -7, rotate: -1 }, { scale: 1.02, yPercent: 4, rotate: .4, duration: 2.5, ease: 'none' }, 0)
+      .fromTo('.cinematic-copy', { yPercent: 38, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .85, ease: 'power3.out' }, .38)
+      .fromTo('.cinematic-copy h2', { scale: .68, transformOrigin: '0% 50%' }, { scale: 1, duration: .72, ease: 'power2.out' }, .5)
+      .to('.cinematic-copy h2', { scale: coarse ? 2.65 : 3.7, xPercent: coarse ? -18 : -30, opacity: .04, filter: 'blur(2px)', duration: 1.15, ease: 'power2.in' }, 1.35)
+      .to('.cinematic-copy p,.cinematic-copy span', { y: -60, opacity: 0, duration: .62 }, 1.5);
   }
 
-  gsap.fromTo('.dev-panel',
-    { y: 88, opacity: 0, scale: 0.95 },
-    { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.dev-panel', start: 'top 84%', once: true } }
-  );
-  gsap.fromTo('.dev-list > div',
-    { x: -32, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.62, stagger: 0.08, ease: 'power2.out', scrollTrigger: { trigger: '.dev-list', start: 'top 87%', once: true } }
-  );
+  gsap.fromTo('.dev-panel', { y: 88, opacity: 0, scale: .96 }, { y: 0, opacity: 1, scale: 1, duration: 1.05, ease: 'power3.out', scrollTrigger: { trigger: '.dev-panel', start: 'top 84%', once: true } });
+  gsap.fromTo('.dev-list > div', { x: -32, opacity: 0 }, { x: 0, opacity: 1, duration: .64, stagger: .075, ease: 'power2.out', scrollTrigger: { trigger: '.dev-list', start: 'top 87%', once: true } });
+  gsap.fromTo('.faq-list details', { x: 42, opacity: 0 }, { x: 0, opacity: 1, duration: .7, stagger: .065, ease: 'power2.out', scrollTrigger: { trigger: '.faq-list', start: 'top 86%', once: true } });
+  gsap.fromTo('.preorder-inner > *', { y: 42, opacity: 0, scale: .97 }, { y: 0, opacity: 1, scale: 1, duration: .76, stagger: .075, ease: 'power3.out', scrollTrigger: { trigger: '.preorder-inner', start: 'top 82%', once: true } });
+  gsap.fromTo('.preorder-inner', { scale: .86 }, { scale: 1.03, ease: 'none', scrollTrigger: { trigger: '.preorder-cta', start: 'top bottom', end: 'center center', scrub: .6 } });
 
-  gsap.fromTo('.faq-list details',
-    { x: 50, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.68, stagger: 0.065, ease: 'power2.out', scrollTrigger: { trigger: '.faq-list', start: 'top 86%', once: true } }
-  );
+  if (!coarse) {
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('pointermove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * .14;
+        const y = (e.clientY - r.top - r.height / 2) * .18;
+        gsap.to(btn, { x, y, duration: .28, ease: 'power2.out' });
+      });
+      btn.addEventListener('pointerleave', () => gsap.to(btn, { x: 0, y: 0, duration: .45, ease: 'elastic.out(1,.5)' }));
+    });
 
-  const preorderTL = gsap.timeline({ scrollTrigger: { trigger: '.preorder-cta', start: 'top 82%', end: 'bottom 72%', scrub: 0.5 } });
-  preorderTL
-    .fromTo('.preorder-inner img', { scale: 0.45, rotate: -10, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: 0.9 })
-    .fromTo('.preorder-inner h2', { scale: 0.72, y: 45, opacity: 0 }, { scale: 1.12, y: 0, opacity: 1, duration: 1 }, 0.2)
-    .fromTo('.preorder-inner .kicker,.preorder-inner>p,.preorder-inner .btn', { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.07, duration: 0.75 }, 0.35);
+    [...document.querySelectorAll('.lore-card,.faction-card')].forEach(card => {
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - .5;
+        const ny = (e.clientY - r.top) / r.height - .5;
+        card.style.setProperty('--card-x', `${e.clientX - r.left}px`);
+        card.style.setProperty('--card-y', `${e.clientY - r.top}px`);
+        gsap.to(card, { rotationY: nx * 6, rotationX: -ny * 5, duration: .32, ease: 'power2.out', transformPerspective: 900 });
+      });
+      card.addEventListener('pointerleave', () => gsap.to(card, { rotationY: 0, rotationX: 0, duration: .55, ease: 'power3.out' }));
+    });
+  }
 
-  gsap.matchMedia().add('(min-width: 900px)', () => {
-    gsap.to('.realm-section .ornament', { y: -38, opacity: 0.2, rotate: 4, ease: 'none', scrollTrigger: { trigger: '.realm-section', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
-  });
-
-  const video = document.querySelector('.hero-video');
-  video?.addEventListener('loadedmetadata', () => ScrollTrigger.refresh(), { once: true });
   window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
   window.addEventListener('resize', () => ScrollTrigger.refresh());
 })();
