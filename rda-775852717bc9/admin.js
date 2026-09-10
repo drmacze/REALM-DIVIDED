@@ -1,4 +1,4 @@
-const ACCESS_HASH='4d35f2359baa99e0c6acbdbc6e035950b6935d1c9a8793920775855036148957';
+const ACCESS_HASH='efdaa9f198bc21b63031e555e866391faa846624717fbc32eda2ea1b67520a03';
 const SESSION_KEY='realm_divided_console_session';
 const NOTES_KEY='realm_divided_dev_notes';
 const gate=document.getElementById('gate');
@@ -28,14 +28,14 @@ async function loadDashboard(){
     ]);
     const build=buildRes.ok?await buildRes.json():null;
     const config=configRes.ok?await configRes.json():null;
-    if(repoState)repoState.textContent='Private source';
+    if(repoState)repoState.textContent='Public';
     if(deployState)deployState.textContent=build?.status||'Unknown';
     if(deployTime)deployTime.textContent=build?.deployedAt?new Date(build.deployedAt).toLocaleString():'GitHub Pages';
     if(commitShort)commitShort.textContent=build?.commit||'Unknown';
     if(commitMessage)commitMessage.textContent=build?.build?'Build '+build.build:'main';
     if(preorderState)preorderState.textContent=config?.preorderState||'Unknown';
   }catch(err){
-    if(repoState)repoState.textContent='Private source';
+    if(repoState)repoState.textContent='Public';
     [deployState,commitShort,preorderState].forEach(el=>{if(el)el.textContent='Unavailable'});
   }
 }
