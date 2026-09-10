@@ -10,9 +10,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="quality-fix.css">
-  <link rel="stylesheet" href="motion.css">
+  <link rel="stylesheet" href="styles.css?v=rd4">
+  <link rel="stylesheet" href="quality-fix.css?v=rd4">
+  <link rel="stylesheet" href="motion.css?v=rd4">
+  <style id="story-critical">
+    .scroll-story{height:270svh;position:relative;background:#050302;color:#f3eadb;z-index:3}
+    .story-sticky{height:100svh;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,#211208 0%,#0b0604 38%,#050302 74%)}
+    .story-stage{position:relative;width:100%;height:100%;display:grid;place-items:center;text-align:center;padding:84px 18px 54px;overflow:hidden}
+    .story-word{position:absolute;left:50%;top:50%;translate:-50% -50%;width:92vw;font-family:Cinzel,serif;text-transform:uppercase;font-weight:800;line-height:.88;text-align:center;will-change:transform,opacity}
+    .story-word-one{font-size:clamp(3.4rem,17vw,5.5rem);color:#f0e2ca}
+    .story-word-two{font-size:clamp(3.2rem,16vw,5.3rem);color:#d39a4e;opacity:0}
+    .story-word-three{font-size:clamp(3rem,15vw,5rem);color:#9f3e30;opacity:0}
+    .story-kicker{position:absolute;top:18%;margin:0;color:#c9954e;text-transform:uppercase;letter-spacing:.24em;font-size:.62rem}
+    .story-caption{position:absolute;bottom:16%;width:min(88vw,520px);margin:0;color:#b8a994;line-height:1.65;font-size:.88rem;opacity:0}
+    .story-factions{position:absolute;left:50%;top:66%;translate:-50% 0;display:flex;gap:10px;justify-content:center;width:92vw;opacity:0}
+    .story-factions span{width:45px;height:58px;display:grid;place-items:center;border:1px solid rgba(221,180,111,.5);font:700 .8rem Cinzel,serif;color:#e6d2b3}
+    .story-scroll-label{display:none}
+  </style>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -148,11 +162,11 @@
     <div class="legal"><p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p><p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p><span>© <span id="year"></span> Realm Divided. Project in development.</span></div>
   </footer>
 
-  <script src="script.js"></script>
-  <script src="quality-fix.js"></script>
+  <script src="script.js?v=rd4"></script>
+  <script src="quality-fix.js?v=rd4"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <script src="motion.js"></script>
+  <script src="motion.js?v=rd4"></script>
 </body>
 </html>
