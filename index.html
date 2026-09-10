@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="quality-fix.css">
+  <link rel="stylesheet" href="motion.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -33,7 +34,7 @@
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <video class="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-        <source src="assets/realm-divided-cinematic.mp4" type="video/mp4">
+        <source src="assets/gemini_generated_video_228E3EF6.mp4" type="video/mp4">
       </video>
       <div class="hero-fallback" aria-hidden="true"></div>
       <div class="hero-vignette" aria-hidden="true"></div>
@@ -49,7 +50,23 @@
         </div>
         <p class="hero-note">COMING SOON · RELEASE DATE TO BE ANNOUNCED</p>
       </div>
-      <a class="scroll-cue" href="#realm"><span></span>Discover</a>
+      <a class="scroll-cue" href="#story"><span></span>Discover</a>
+    </section>
+
+    <section class="scroll-story" id="story" aria-label="The empire fractures">
+      <div class="story-sticky">
+        <div class="story-grid" aria-hidden="true"></div>
+        <div class="story-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="story-stage">
+          <p class="story-kicker">Before the fracture</p>
+          <div class="story-word story-word-one" aria-label="One Empire">One Empire</div>
+          <div class="story-word story-word-two" aria-label="Five Claims">Five Claims</div>
+          <div class="story-word story-word-three" aria-label="Realm Divided">Realm Divided</div>
+          <div class="story-factions" aria-hidden="true"><span>I</span><span>II</span><span>III</span><span>IV</span><span>V</span></div>
+          <p class="story-caption">A crown without an heir became a continent without peace.</p>
+          <div class="story-scroll-label" aria-hidden="true">Keep scrolling</div>
+        </div>
+      </div>
     </section>
 
     <section class="section realm-section" id="realm">
@@ -72,12 +89,14 @@
         <h2>Choose where you stand.</h2>
         <p>The names, rulers, territories, and complete histories of the five factions remain sealed for now.</p>
       </div>
-      <div class="faction-row">
-        <article class="faction-card red reveal"><div class="sigil">I</div><h3>Faction I</h3><span>Reveal coming soon</span></article>
-        <article class="faction-card blue reveal"><div class="sigil">II</div><h3>Faction II</h3><span>Reveal coming soon</span></article>
-        <article class="faction-card green reveal"><div class="sigil">III</div><h3>Faction III</h3><span>Reveal coming soon</span></article>
-        <article class="faction-card gold reveal"><div class="sigil">IV</div><h3>Faction IV</h3><span>Reveal coming soon</span></article>
-        <article class="faction-card purple reveal"><div class="sigil">V</div><h3>Faction V</h3><span>Reveal coming soon</span></article>
+      <div class="faction-viewport">
+        <div class="faction-row">
+          <article class="faction-card red reveal"><div class="sigil">I</div><h3>Faction I</h3><span>Reveal coming soon</span></article>
+          <article class="faction-card blue reveal"><div class="sigil">II</div><h3>Faction II</h3><span>Reveal coming soon</span></article>
+          <article class="faction-card green reveal"><div class="sigil">III</div><h3>Faction III</h3><span>Reveal coming soon</span></article>
+          <article class="faction-card gold reveal"><div class="sigil">IV</div><h3>Faction IV</h3><span>Reveal coming soon</span></article>
+          <article class="faction-card purple reveal"><div class="sigil">V</div><h3>Faction V</h3><span>Reveal coming soon</span></article>
+        </div>
       </div>
     </section>
 
@@ -122,13 +141,18 @@
       <div class="footer-links"><a href="#realm">The Realm</a><a href="#factions">Factions</a><a href="#development">Development</a><a href="#faq">FAQ</a><a href="preorder.html">Pre-Order</a></div>
     </div>
     <div class="platform-strip" aria-label="Brand references">
-      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer" aria-label="Xbox"><img class="xbox-logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Xbox_Logo.svg" alt="Xbox"></a>
+      <a href="https://www.xbox.com/" target="_blank" rel="noreferrer" aria-label="Xbox"><img class="xbox-logo" src="assets/xbox-logo.svg" alt="Xbox"></a>
       <a href="https://www.minecraft.net/" target="_blank" rel="noreferrer"><img class="minecraft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Minecraft%20Logo-en.svg" alt="Minecraft"></a>
       <a href="https://www.microsoft.com/" target="_blank" rel="noreferrer"><img class="microsoft-logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Microsoft.svg" alt="Microsoft"></a>
     </div>
     <div class="legal"><p>Realm Divided is an independent fan-made Minecraft project and is not an official Minecraft product. It is not approved by or associated with Mojang Studios, Microsoft, or Xbox.</p><p>Microsoft, Xbox, Minecraft and their respective marks are trademarks of their respective owners. Brand marks are used for identification only.</p><span>© <span id="year"></span> Realm Divided. Project in development.</span></div>
   </footer>
+
   <script src="script.js"></script>
   <script src="quality-fix.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="motion.js"></script>
 </body>
 </html>
