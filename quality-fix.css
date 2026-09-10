@@ -1,0 +1,21 @@
+/* Realm Divided visual-quality overrides. Keep large raster artwork out of full-screen upscaling. */
+.hero{background:#090604;isolation:isolate}
+.hero-fallback{z-index:0!important;filter:none!important;transform:none!important;background-image:
+ radial-gradient(circle at 50% 26%,rgba(156,92,35,.24),transparent 28%),
+ radial-gradient(circle at 15% 48%,rgba(101,24,20,.17),transparent 24%),
+ radial-gradient(circle at 86% 42%,rgba(52,56,77,.19),transparent 28%),
+ linear-gradient(145deg,#160d08 0%,#090604 42%,#110906 72%,#050302 100%)!important}
+.hero-fallback:before,.hero-fallback:after{content:"";position:absolute;inset:0;pointer-events:none}
+.hero-fallback:before{opacity:.22;background-image:linear-gradient(90deg,transparent 49.7%,rgba(207,150,72,.14) 50%,transparent 50.3%),linear-gradient(0deg,transparent 49.7%,rgba(207,150,72,.07) 50%,transparent 50.3%);background-size:88px 88px;mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 78%,transparent)}
+.hero-fallback:after{background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.58) 100%)}
+.hero-video{z-index:1;background:transparent;filter:saturate(.92) contrast(1.04);transform:none}
+.hero-video.video-unavailable{display:none}
+.hero-vignette{z-index:2}.hero-content{z-index:3}.scroll-cue{z-index:4}
+.hero-crest,.brand img,.footer-brand img,.preorder-inner img{image-rendering:auto;backface-visibility:hidden}
+.cinematic-break{background:linear-gradient(135deg,#160d08,#090604 48%,#120a07)}
+.cinematic-art{inset:0;filter:none!important;transform:none!important;background-image:radial-gradient(circle at 74% 28%,rgba(118,62,39,.25),transparent 24%),radial-gradient(circle at 28% 50%,rgba(109,74,35,.2),transparent 30%),linear-gradient(125deg,#110905,#080604 52%,#150b08)!important}
+.cinematic-art:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(211,161,86,.05) 1px,transparent 1px),linear-gradient(rgba(211,161,86,.035) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(circle at center,#000,transparent 82%)}
+.platform-strip .xbox-logo{display:block!important;width:42px!important;height:42px!important;object-fit:contain;filter:brightness(0) invert(1)!important;opacity:1!important}
+.platform-strip a:has(.xbox-logo){opacity:.82!important;filter:none!important}
+.platform-strip a:has(.xbox-logo):hover{opacity:1!important}
+@media(max-width:620px){.hero-fallback:before{background-size:64px 64px}.hero-video{object-position:center center}.cinematic-break{min-height:390px}}
