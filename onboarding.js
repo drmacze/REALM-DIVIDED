@@ -11,6 +11,7 @@
     'assets/blendertimer-medieval-kingdoms-598387.mp3',
     'assets/realm-divided-song.mp3'
   ];
+  const FORCE_PREVIEW = new URLSearchParams(location.search).get('intro') === '1';
 
   const safeGet = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
   const safeSet = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
@@ -186,7 +187,7 @@
     return root;
   }
 
-  function controller(root) {
+  function controller(root, forcePreview = false) {
     const panels = [...root.querySelectorAll('[data-stage]')];
     const dots = [...root.querySelectorAll('.rd-entry-progress i')];
     let current = null;
@@ -199,9 +200,7 @@
       const next = root.querySelector(`[data-stage="${name}"]`);
       if (!next) return;
       const swap = () => {
-        panels.forEach(panel => {
-          panel.classList.remove('is-active', 'is-leaving');
-        });
+        panels.forEach(panel => panel.classList.remove('is-active', 'is-leaving'));
         next.classList.add('is-active');
         current = next;
         const idx = stageProgress[name];
@@ -210,9 +209,8 @@
       if (current?.classList.contains('is-active')) {
         current.classList.add('is-leaving');
         transitionTimer = window.setTimeout(swap, Math.max(420, delay));
-      } else if (delay) {
-        transitionTimer = window.setTimeout(swap, delay);
-      } else swap();
+      } else if (delay) transitionTimer = window.setTimeout(swap, delay);
+      else swap();
     }
 
     function typeMessage() {
@@ -264,35 +262,35 @@
       if (value === 'yes') {
         stage('typing');
         window.setTimeout(typeMessage, 520);
-      } else {
-        stage('source');
-      }
+      } else stage('source');
     }));
 
     root.querySelectorAll('[data-source]').forEach(btn => btn.addEventListener('click', () => finish(btn.dataset.source)));
 
-    const consentKnown = safeGet(STORAGE.consent) || hasCookie('rd_cookie_consent');
+    const consentKnown = !forcePreview && (safeGet(STORAGE.consent) || hasCookie('rd_cookie_consent'));
     if (consentKnown) {
       stage('welcome', 160);
       window.setTimeout(() => stage('interest'), 3000);
-    } else {
-      stage('cookie', 100);
-    }
+    } else stage('cookie', 100);
   }
 
-  function startFirstVisit() {
+  function startFirstVisit(forcePreview = false) {
     lockPage();
     const root = buildEntry();
     requestAnimationFrame(() => root.classList.add('is-visible'));
-    controller(root);
+    controller(root, forcePreview);
   }
 
   function boot() {
+    if (FORCE_PREVIEW) {
+      startFirstVisit(true);
+      return;
+    }
     if (safeGet(STORAGE.complete) === '1') {
       armReturningMusic();
       return;
     }
-    startFirstVisit();
+    startFirstVisit(false);
   }
 
   window.RealmOnboarding = {
