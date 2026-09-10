@@ -5,24 +5,29 @@
   if (!shouldResume) return;
   try { sessionStorage.removeItem('rd_resume_music_once'); } catch (_) {}
 
-  const attempt = async () => {
-    try {
-      const ok = await window.RealmOnboarding?.playMusic?.();
-      if (ok) cleanup();
-      return ok;
-    } catch (_) { return false; }
-  };
+  let tries = 0;
+  const maxTries = 30;
   const cleanup = () => {
     window.removeEventListener('pointerdown', attempt, true);
     window.removeEventListener('touchstart', attempt, true);
     window.removeEventListener('keydown', attempt, true);
   };
-  window.setTimeout(async () => {
+  const attempt = async () => {
+    try {
+      if (!window.RealmOnboarding?.playMusic) return false;
+      const ok = await window.RealmOnboarding.playMusic();
+      if (ok) cleanup();
+      return !!ok;
+    } catch (_) { return false; }
+  };
+  const retry = async () => {
+    tries += 1;
     const ok = await attempt();
-    if (!ok) {
-      window.addEventListener('pointerdown', attempt, true);
-      window.addEventListener('touchstart', attempt, true);
-      window.addEventListener('keydown', attempt, true);
-    }
-  }, 120);
+    if (ok) return;
+    if (tries < maxTries) return window.setTimeout(retry, 120);
+    window.addEventListener('pointerdown', attempt, true);
+    window.addEventListener('touchstart', attempt, true);
+    window.addEventListener('keydown', attempt, true);
+  };
+  window.setTimeout(retry, 80);
 })();
