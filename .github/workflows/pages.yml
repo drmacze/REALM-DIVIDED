@@ -25,6 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Prepare Other Project artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          cat assets/directive-i-other-project-b64/part-* | tr -d '\n\r ' | base64 --decode > assets/directive-i-other-project.webp
+          test -s assets/directive-i-other-project.webp
+          rm -rf assets/directive-i-other-project-b64
+
       - name: Generate build info
         shell: bash
         run: |
